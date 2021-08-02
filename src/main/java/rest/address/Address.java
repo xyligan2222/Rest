@@ -1,6 +1,7 @@
 package rest.address;
 
 import org.springframework.stereotype.Component;
+import rest.client.Client;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -11,22 +12,31 @@ public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private int id;
 
     @Column(nullable = false)
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    private Address owner;
+    private Client owner;
 
     public Address() {
     }
 
-    public long getId() {
+    public Address(String name) {
+        this.name = name;
+    }
+
+    public Address(String name, Client owner) {
+        this.name = name;
+        this.owner = owner;
+    }
+
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -38,11 +48,11 @@ public class Address {
         this.name = name;
     }
 
-    public Address getOwner() {
+    public Client getOwner() {
         return owner;
     }
 
-    public void setOwner(Address owner) {
+    public void setOwner(Client owner) {
         this.owner = owner;
     }
 

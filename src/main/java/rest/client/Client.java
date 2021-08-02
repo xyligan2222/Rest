@@ -1,5 +1,6 @@
 package rest.client;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.stereotype.Component;
 import rest.address.Address;
 
@@ -26,9 +27,21 @@ public class Client {
     private String surname;
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Address> address = new ArrayList<>();
 
     public Client() {
+    }
+
+    public Client(String name, String surname) {
+        this.name = name;
+        this.surname = surname;
+    }
+
+    public Client(String name, String surname, List<Address> address) {
+        this.name = name;
+        this.surname = surname;
+        this.address = address;
     }
 
     public int getId() {

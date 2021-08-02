@@ -10,24 +10,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/clients")
 public class ClientController {
 
     private final ClientService clientService;
 
-    private final ModelMapper mapper;
+//    private final ModelMapper mapper;
 
-    public ClientController(@Autowired ClientService clientService,
-                            @Autowired ModelMapper mapper) {
+    public ClientController(@Autowired ClientService clientService
+                            ) {
         this.clientService = clientService;
-        this.mapper = mapper;
+
     }
 
     @GetMapping("/client/{id}")
     public ResponseEntity<Client> getClient(@PathVariable int id) {
         Client response = clientService.getClientById(id);
         if (response != null) {
-            return new ResponseEntity<>(mapper.map(response, Client.class), HttpStatus.OK);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -42,13 +42,11 @@ public class ClientController {
             list = clientService
                     .getFilteredClients(filter)
                     .stream()
-                    .map(e -> mapper.map(e, Client.class))
                     .collect(Collectors.toList());
         } else {
             list = clientService
                     .getAllClient()
                     .stream()
-                    .map(e -> mapper.map(e, Client.class))
                     .collect(Collectors.toList());
         }
         return new ResponseEntity<>(list, HttpStatus.OK);
@@ -59,8 +57,8 @@ public class ClientController {
         if (client.getId() != 0) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-        Client response = clientService.saveOrUpdateClients(mapper.map(client, Client.class));
-        return new ResponseEntity<>(mapper.map(response, Client.class), HttpStatus.OK);
+
+        return new ResponseEntity<>(client, HttpStatus.OK);
     }
 
     @PutMapping("/client")
@@ -68,8 +66,7 @@ public class ClientController {
         if (client.getId() == 0) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-        Client response = clientService.saveOrUpdateClients(mapper.map(client, Client.class));
-        return new ResponseEntity<>(mapper.map(response, Client.class), HttpStatus.OK);
+        return new ResponseEntity<>(client, HttpStatus.OK);
     }
 
     @DeleteMapping("/client/{id}")

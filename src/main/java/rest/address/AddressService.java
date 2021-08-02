@@ -22,7 +22,7 @@ public class AddressService {
 
     @Transactional(readOnly = true)
     public List<Address> getAddressByClient(int owner){
-        return addressRepository.findByOwnerId(owner);
+        return (List<Address>) addressRepository.findByOwnerId(owner);
     }
 
     @Transactional(readOnly = true)

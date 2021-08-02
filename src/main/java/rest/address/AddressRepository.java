@@ -7,7 +7,5 @@ import java.util.List;
 
 @Repository
 public interface AddressRepository extends JpaRepository<Address, Integer> {
-    List<Address> findByOwnerId(int id);
-//    Address findById(int id);
-//    Address deleteById(int id);
+    Address findByOwnerId(int id);
 }

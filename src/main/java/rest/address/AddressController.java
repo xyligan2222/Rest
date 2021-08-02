@@ -14,12 +14,11 @@ import java.util.stream.Collectors;
 public class AddressController {
     private final AddressService addressService;
 
-    private final ModelMapper mapper;
 
     public AddressController(@Autowired AddressService addressService,
                              @Autowired ModelMapper mapper) {
         this.addressService = addressService;
-        this.mapper = mapper;
+
     }
 
     @GetMapping("/address")
@@ -30,13 +29,11 @@ public class AddressController {
             list = addressService
                     .getAddressByClient(clientId)
                     .stream()
-                    .map(e -> mapper.map(e, Address.class))
                     .collect(Collectors.toList());
         } else {
             list = addressService
                     .getAllAddress()
                     .stream()
-                    .map(e -> mapper.map(e, Address.class))
                     .collect(Collectors.toList());
         }
         return new ResponseEntity<>(list, HttpStatus.OK);
@@ -46,7 +43,7 @@ public class AddressController {
     public ResponseEntity<Address> getAddress(@PathVariable int id) {
         Address response = addressService.getAddressById(id);
         if (response != null) {
-            return new ResponseEntity<>(mapper.map(response, Address.class), HttpStatus.OK);
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -57,8 +54,8 @@ public class AddressController {
         if (address.getId() != 0) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-        Address response = addressService.saveOrUpdateAddress(mapper.map(address, Address.class));
-        return new ResponseEntity<>(mapper.map(response, Address.class), HttpStatus.OK);
+
+        return new ResponseEntity<>(address, HttpStatus.OK);
     }
 
     @PutMapping("/address")
@@ -66,8 +63,7 @@ public class AddressController {
         if (address.getId() == 0) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
-        Address response = addressService.saveOrUpdateAddress(mapper.map(address, Address.class));
-        return new ResponseEntity<>(mapper.map(response, Address.class), HttpStatus.OK);
+        return new ResponseEntity<>(address, HttpStatus.OK);
     }
 
     @DeleteMapping("/address/{id}")
